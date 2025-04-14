@@ -1,5 +1,5 @@
 //block/mod.rs
-/*
+
 use bevy::{color::palettes::basic::RED, prelude::*};
 
 pub fn setup_chunk(
@@ -13,4 +13,3 @@ pub fn setup_chunk(
         Transform::default().with_scale(Vec3::splat(64.)),
     ));
 }
-*/
