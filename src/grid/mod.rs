@@ -1,5 +1,7 @@
-use bevy::{ecs::bundle::Bundles, prelude::*, sprite::MaterialMesh2dBundle, text::cosmic_text::rustybuzz::shape};
-use crate::grid::constants::{BLOCK_SIZE, GRID_HEIGHT};
+//grid/mod.rs
+use bevy::prelude::*;
+use bevy::render::mesh::Mesh2d;
+use crate::grid::constants::{BLOCK_SIZE, GRID_HEIGHT, GRID_WIDTH};
 pub mod constants;
 
 
@@ -30,19 +32,27 @@ pub fn spawn_grid(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
+    let quad = Rectangle::default();
+    let quad_handle = meshes.add(quad);
+
+    let material_handle = materials.add(Color::srgba(0.8, 0.8, 0.8, 0.1));
+
     for y in 0..GRID_HEIGHT {
-        for x in 0..constants::GRID_WIDTH {
+        for x in 0..GRID_WIDTH {
             commands.spawn((
-                MaterialMesh2dBundle {
-                    mesh: meshes.add(shape::Quad::default().into()).into(),
-                    material: materials.add(Color::rgba(
-                        0.8, 0.8, 0.8, 0.1)), // cinza transparente
-                    transform: Transform::from_translation(grid_to_world(x, y))
-                        .with_scale(Vec3::splat(BLOCK_SIZE)),
-                    ..default()
-                },
+                Mesh2d(quad_handle.clone()),
+                MeshMaterial2d(material_handle.clone()),
+                Transform::from_translation(grid_to_world(x, y))
+                    .with_scale(Vec3::splat(BLOCK_SIZE)),
                 GridPosition { x, y },
             ));
         }
     }
 }
+
+/*
+                Mesh2d(meshes.add(Rectangle::default())),
+                MeshMaterial2d(materials.add(Color::srgba(0.8, 0.8, 0.8, 0.1))),
+                Transform::from_translation(grid_to_world(x, y))
+                    .with_scale(Vec3::splat(BLOCK_SIZE))
+*/

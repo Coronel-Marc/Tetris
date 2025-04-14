@@ -1,3 +1,4 @@
+//viewer/mod.rs
 use bevy::prelude::*;
     
 pub struct ViewerPlugin;

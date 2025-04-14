@@ -16,7 +16,7 @@ fn main() {
                  ..default()
             }))
         .add_plugins(viewer::ViewerPlugin)
-        //.add_systems(Startup, chunk::chunk::setup_chunk)
+        .add_plugins(grid::GridPlugin)
         .run();
     
 }

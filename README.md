@@ -11,7 +11,7 @@ A medida que o projeto for crescendo irei atualizar este README, tornando-o uma 
 
 ## Lista de tarefas
 
-- [ ] Janela para visualização
-- [ ] Interface gráfica
+- [ X ] Janela para visualização
+- [ ] Gridline
 - [ ] Unidade do bloco
 - [ ] ...
