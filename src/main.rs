@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 mod viewer;
-mod block;
+mod tetromino;
 mod grid;
 
 fn main() {
@@ -17,6 +17,7 @@ fn main() {
             }))
         .add_plugins(viewer::ViewerPlugin)
         .add_plugins(grid::GridPlugin)
+       // .add_plugins(tetromino::spawn_mino)
         .run();
     
 }
