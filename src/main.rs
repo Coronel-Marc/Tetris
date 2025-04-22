@@ -17,7 +17,7 @@ fn main() {
             }))
         .add_plugins(viewer::ViewerPlugin)
         .add_plugins(grid::GridPlugin)
-       // .add_plugins(tetromino::spawn_mino)
+        .add_plugins(tetromino::TetrominoPlugin)
         .run();
     
 }
