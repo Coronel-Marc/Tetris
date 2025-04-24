@@ -1,4 +1,6 @@
 pub mod types;
+
+
 use bevy::input::keyboard::*;
 use bevy::{color::palettes::basic::RED, prelude::*};
 
@@ -10,8 +12,9 @@ use rand::seq::SliceRandom;
 use rand::thread_rng;
 
 
-/* #[derive(Component)]
-pub struct Mino; */
+#[derive(Component)]
+pub struct ActiveTetromino;
+
 
 #[derive(Component)]
 pub struct Tetromino{
@@ -47,9 +50,12 @@ pub fn spawn_tetromino(
 
     let start_x = GRID_WIDTH / 2 - 1;
     let start_y = GRID_HEIGHT - 2;
+    
+ 
 
     
     for pos in kind.shape() {
+        
         let x = pos.x + start_x;
         let y = pos.y + start_y;
 
@@ -58,7 +64,7 @@ pub fn spawn_tetromino(
             Mesh2d(mesh.clone()),
             MeshMaterial2d(material.clone()),
             Transform::from_translation(grid_to_world(x,y)).with_scale(Vec3::splat(32.0)),
-        )).set_parent(parent);
+        )).set_parent(parent).insert(ActiveTetromino);
 
         println!("Spawned tetromino of kind {:?} at top", kind);
     }
@@ -68,11 +74,15 @@ pub fn spawn_tetromino(
 
 fn spawn_tetromino_on_key(
     keys: ResMut<ButtonInput<KeyCode>>,
-    commands: Commands,
+    mut commands: Commands,
     meshes: ResMut<Assets<Mesh>>,
     materials: ResMut<Assets<ColorMaterial>>,
+    query: Query<Entity, With<ActiveTetromino>>
 ){
     if keys.just_pressed(KeyCode::Space) {
+        for entity in query.iter() {
+            commands.entity(entity).despawn_recursive();
+        }
         spawn_tetromino(commands, meshes, materials);
     }
 }

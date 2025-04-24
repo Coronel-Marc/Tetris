@@ -58,4 +58,16 @@ impl TetrominoType {
             ],
         }
     }
+    pub fn rotation_center(&self) -> GridPosition {
+        match self {
+            TetrominoType::O => GridPosition { x: 0, y: 0 }, // não gira
+            TetrominoType::I => GridPosition { x: 1, y: 0 },
+            TetrominoType::J => GridPosition { x: 1, y: 0 },
+            TetrominoType::L => GridPosition { x: 1, y: 0 },
+            TetrominoType::S => GridPosition { x: 1, y: 0 },
+            TetrominoType::T => GridPosition { x: 1, y: 0 },
+            TetrominoType::Z => GridPosition { x: 1, y: 0 },
+        }
+    }
+    
 }
