@@ -1,8 +1,14 @@
 pub mod types;
+use bevy::input::keyboard::*;
 use bevy::{color::palettes::basic::RED, prelude::*};
 
+use crate::grid::constants::{GRID_WIDTH, GRID_HEIGHT};
 use crate::tetromino::types::TetrominoType;
 use crate::grid::{grid_to_world, GridPosition};
+
+use rand::seq::SliceRandom;
+use rand::thread_rng;
+
 
 /* #[derive(Component)]
 pub struct Mino; */
@@ -19,7 +25,17 @@ pub fn spawn_tetromino(
 ){
     let mesh = meshes.add(Rectangle::default());
     let material = materials.add(Color::from(RED));
-    let kind = TetrominoType::O;
+
+    let types = [
+        TetrominoType::I,
+        TetrominoType::J,
+        TetrominoType::L,
+        TetrominoType::O,
+        TetrominoType::S,
+        TetrominoType::T,
+        TetrominoType::Z,
+    ];
+    let kind = *types.choose(&mut thread_rng()).unwrap();
 
     let parent = commands.spawn((
         Transform::default(),
@@ -29,39 +45,29 @@ pub fn spawn_tetromino(
         Tetromino { kind },
     )).id();
 
+    let start_x = GRID_WIDTH / 2 - 1;
+    let start_y = GRID_HEIGHT - 2;
+
     
     for pos in kind.shape() {
+        let x = pos.x + start_x;
+        let y = pos.y + start_y;
+
         commands.spawn((
-            GridPosition {x: pos.x, y: pos.y},
+            GridPosition {x, y},
             Mesh2d(mesh.clone()),
             MeshMaterial2d(material.clone()),
-            Transform::from_translation(grid_to_world(pos.x,pos.y)).with_scale(Vec3::splat(32.0)),
-            Visibility::Visible,
-            InheritedVisibility::default(),
-            GlobalTransform::default(),
+            Transform::from_translation(grid_to_world(x,y)).with_scale(Vec3::splat(32.0)),
         )).set_parent(parent);
+
+        println!("Spawned tetromino of kind {:?} at top", kind);
     }
-    println!("Spawned tetromino of kind {:?}", kind);
 }
 
 
 
-/* pub fn spawn_mino(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
-) {
-    commands.spawn((
-        Mino,
-        Mesh2d(meshes.add(Rectangle::default())),
-        MeshMaterial2d(materials.add(Color::from(RED))),
-        Transform::from_translation(Vec3::ZERO).with_scale(Vec3::splat(32.0)),
-        GlobalTransform::default(),
-    ));
-} */
-
 fn spawn_tetromino_on_key(
-    keys: Res<ButtonInput<KeyCode>>,
+    keys: ResMut<ButtonInput<KeyCode>>,
     commands: Commands,
     meshes: ResMut<Assets<Mesh>>,
     materials: ResMut<Assets<ColorMaterial>>,

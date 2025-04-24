@@ -9,7 +9,6 @@ pub struct GridPlugin;
 
 impl Plugin for GridPlugin {
     fn build(&self, app: &mut App){
-        //adcionar mais coisas já já...
         app.add_systems(Startup, spawn_grid);
     }
 }
