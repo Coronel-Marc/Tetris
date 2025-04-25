@@ -1,4 +1,4 @@
-use crate::grid::GridPosition;
+use crate::grid::{GridPosition, RotationCenter};
 
 #[derive(Clone, Copy, Debug)]
 pub enum TetrominoType {
@@ -58,16 +58,17 @@ impl TetrominoType {
             ],
         }
     }
-    pub fn rotation_center(&self) -> GridPosition {
+    pub fn rotation_center(&self) -> RotationCenter {
         match self {
-            TetrominoType::O => GridPosition { x: 0, y: 0 }, // não gira
-            TetrominoType::I => GridPosition { x: 1, y: 0 },
-            TetrominoType::J => GridPosition { x: 1, y: 0 },
-            TetrominoType::L => GridPosition { x: 1, y: 0 },
-            TetrominoType::S => GridPosition { x: 1, y: 0 },
-            TetrominoType::T => GridPosition { x: 1, y: 0 },
-            TetrominoType::Z => GridPosition { x: 1, y: 0 },
+            TetrominoType::O => RotationCenter { x: 0.5, y: 0.5 }, // tecnicamente, mas não gira
+            TetrominoType::I => RotationCenter { x: 1.5, y: 0.5 },
+            TetrominoType::J => RotationCenter { x: 1.0, y: 0.0 },
+            TetrominoType::L => RotationCenter { x: 1.0, y: 0.0 },
+            TetrominoType::S => RotationCenter { x: 1.0, y: 0.0 },
+            TetrominoType::T => RotationCenter { x: 1.0, y: 0.0 },
+            TetrominoType::Z => RotationCenter { x: 1.0, y: 0.0 },
         }
     }
+
     
 }

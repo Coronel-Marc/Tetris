@@ -19,6 +19,13 @@ pub struct GridPosition {
     pub y: i32,
 }
 
+#[derive(Clone, Copy, Debug)]
+pub struct RotationCenter {
+    pub x: f32,
+    pub y: f32,
+}
+
+
 pub fn grid_to_world(x:i32, y:i32) -> Vec3 {
     //O (0, 0) será o canto inferior esquerdo.
     let offset_x = -(GRID_WIDTH as f32 * BLOCK_SIZE) / 2.0;

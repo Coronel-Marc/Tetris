@@ -21,6 +21,7 @@ pub struct Tetromino{
     pub kind: TetrominoType,
 }
 
+
 pub fn spawn_tetromino(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
@@ -90,6 +91,58 @@ fn spawn_tetromino_on_key(
 pub struct TetrominoPlugin;
 impl Plugin for TetrominoPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, spawn_tetromino_on_key);
+        app.add_systems(Update, (
+            spawn_tetromino_on_key,
+            rotate_active_tetromino
+        ));
     }
 }
+
+fn rotate_active_tetromino(
+    keys: Res<ButtonInput<KeyCode>>,
+    mut minos_query: Query<(&mut GridPosition, &mut Transform), With<ActiveTetromino>>,
+    tetromino_query: Query<(&Children, &Tetromino), Without<ActiveTetromino>>,
+) {
+    if keys.just_pressed(KeyCode::KeyR) {
+        for (children, tetromino) in tetromino_query.iter() {
+            let center = tetromino.kind.rotation_center();
+
+            // Primeiro, calcula a nova posição de todos os minos
+            let mut new_positions = vec![];
+            for &child in children.iter() {
+                if let Ok((pos, _)) = minos_query.get(child) {
+                    let dx = pos.x as f32 - center.x;
+                    let dy = pos.y as f32 - center.y;
+
+                    let new_x = center.x - dy;
+                    let new_y = center.y + dx;
+
+                    new_positions.push(GridPosition {
+                        x: new_x.round() as i32,
+                        y: new_y.round() as i32,
+                    });
+                }
+            }
+
+            // Verifica se todos os novos minos estão dentro do grid
+            let is_valid = new_positions.iter().all(|pos| {
+                pos.x >= 0 && pos.x < GRID_WIDTH && pos.y >= 0 && pos.y < GRID_HEIGHT
+            });
+
+            if is_valid {
+                // Se for válido, atualiza a posição de cada mino
+                for (&child, new_pos) in children.iter().zip(new_positions.iter()) {
+                    if let Ok((mut pos, mut transform)) = minos_query.get_mut(child) {
+                        pos.x = new_pos.x;
+                        pos.y = new_pos.y;
+                        transform.translation = grid_to_world(pos.x, pos.y);
+                    }
+                }
+                println!("Tetromino {:?} rotacionado com sucesso", tetromino.kind);
+            } else {
+                println!("Rotação inválida para o tetromino {:?}", tetromino.kind);
+            }
+        }
+    }
+}
+
