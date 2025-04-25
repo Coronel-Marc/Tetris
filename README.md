@@ -11,11 +11,14 @@ A medida que o projeto for crescendo irei atualizar este README, tornando-o uma 
 
 ## Lista de tarefas
 
-- [ X ] Janela para visualização
-- [ X ] Gridline
-- [ X ] Unidade do bloco
-- [ ] Bloco Tetromino ( Formado por pelo menos 4 unidades)
+- [X] Janela para visualização
+- [X] Gridline
+- [X] Unidade do bloco
+- [X] Bloco Tetromino ( Formado por pelo menos 4 unidades)
+- [X] Sistema de gravidade e colisão
+- [ ] Sistema de rotação
 - [ ] ...
+
 
 ## Resumo até agora
 
